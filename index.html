@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mooves - Connect with Confidence</title>
+    <link rel="icon" type="image/png" href="mooves-icon.png">
+    <link rel="apple-touch-icon" href="mooves-icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-purple: #5A3BFF;
+            --primary-purple-light: #7A5CFF;
+            --accent-coral: #FF9B8B;
+            --accent-coral-dark: #E57373;
+            --pink-background: #FFFCFA;
+            --pink-card: #FFFAF8;
+            --pink-medium: #FFF0ED;
+            --pink-light: #FFF8F6;
+            --text-primary: #0A0508;
+            --text-secondary: #4A2D35;
+            --accent-orange: #ffc107;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--pink-background);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-purple);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            box-shadow: 0 10px 40px rgba(90, 59, 255, 0.3);
+            transition: transform 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .beta-badge {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        /* Presentation Hero Section */
+        .presentation-hero {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-light) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(90, 59, 255, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presentation-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .presentation-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .presentation-hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .presentation-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .presentation-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-purple);
+            padding: 1.2rem 3rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .presentation-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .presentation-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--pink-card);
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(90, 59, 255, 0.15);
+        }
+
+        .card h2 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h2::before {
+            content: '';
+            width: 4px;
+            height: 2rem;
+            background: var(--primary-purple);
+            border-radius: 2px;
+        }
+
+        .features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .features li {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.05rem;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary-purple);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Download Section */
+        .download-section {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-light) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 25px;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(90, 59, 255, 0.3);
+        }
+
+        .download-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .download-option {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .download-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .download-option h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-purple);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Legal Links */
+        .legal-section {
+            background: var(--pink-card);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .legal-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .legal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .legal-link {
+            background: var(--pink-card);
+            padding: 2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .legal-link:hover {
+            background: var(--pink-medium);
+            border-color: var(--primary-purple);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(90, 59, 255, 0.15);
+        }
+
+        .legal-link h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .legal-link p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(90, 59, 255, 0.1);
+        }
+
+        footer p {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .main-grid,
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .presentation-stats {
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Smooth Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card,
+        .presentation-hero,
+        .download-section,
+        .legal-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid;
+        }
+
+        .info-box.warning {
+            background: #fff3cd;
+            border-color: var(--accent-orange);
+        }
+
+        .info-box.info {
+            background: #e3f2fd;
+            border-color: var(--accent-blue);
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-brand">🔑 Mooves</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#presentation">Presentation</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="#legal">Legal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <img src="mooves-icon.png" alt="Mooves Logo" class="logo">
+            <h1>Mooves</h1>
+            <div class="beta-badge">🧪 Beta Testing</div>
+            <p class="tagline">Find Your Perfect Connection</p>
+        </section>
+
+        <!-- Presentation Hero Section -->
+        <section id="presentation" class="presentation-hero">
+            <div class="presentation-hero-content">
+                <h2>📊 Discover Mooves</h2>
+                <p>Explore our comprehensive presentation showcasing features, technology, and vision</p>
+                <a href="mooves-presentation.pdf" target="_blank" class="presentation-button">
+                    View Full Presentation
+                </a>
+                <div class="presentation-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">24</span>
+                        <span class="stat-label">Slides</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Tech</span>
+                        <span class="stat-label">Stack Overview</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">AI</span>
+                        <span class="stat-label">Powered Matching</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2026</span>
+                        <span class="stat-label">Roadmap</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div id="about" class="main-grid">
+            <div class="card">
+                <h2>About Mooves</h2>
+                <p>Mooves is a unique connection app that matches people based on <strong>keywords</strong>. Share your interests, hobbies, goals, or any keywords that represent who you are, and discover others who share similar keywords.</p>
+                
+                <p>Our keyword-based matching system helps you find connections through shared interests, experiences, or aspirations. Simply add keywords to your profile and let Mooves find people who share your keywords.</p>
+                
+                <ul class="features">
+                    <li>Keyword-based matching system</li>
+                    <li>Share interests and hobbies as keywords</li>
+                    <li>Discover people with similar keywords</li>
+                    <li>Simple and intuitive keyword profiles</li>
+                    <li>Connect through shared interests</li>
+                    <li>AI-powered chat assistance</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Join Our Beta</h2>
+                
+                <div class="info-box warning">
+                    <strong>🧪 Beta Testing Phase</strong>
+                    Mooves is currently in private beta testing. Request access to be among the first to try our app!
+                </div>
+
+                <p style="margin: 1.5rem 0; color: var(--text-secondary);">
+                    To join our beta testing program, send us an email with your Google Play account:
+                </p>
+                
+                <a href="mailto:mooves@klasholmgren.se?subject=Key%20Match%20Beta%20Access%20Request&body=Hi%2C%0A%0AI%20would%20like%20to%20request%20access%20to%20the%20Key%20Match%20beta%20testing%20program.%0A%0AMy%20Google%20Play%20email%20address%20is%3A%20%5BYour%20Email%5D%0A%0AThank%20you!" 
+                   class="download-button" style="display: inline-block; margin-top: 0;">
+                    📧 Request Beta Access
+                </a>
+
+                <p style="margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-secondary);">
+                    <strong>What to include:</strong><br>
+                    • Your Google Play email address<br>
+                    • Why you're interested in Mooves<br>
+                    • Any feedback you'd like to share
+                </p>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <section id="download" class="download-section">
+            <h2>📲 Get Mooves Now</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95;">
+                Choose your preferred installation method
+            </p>
+
+            <div class="download-grid">
+                <div class="download-option">
+                    <h3>🏪 Google Play Store</h3>
+                    <p style="margin: 1rem 0; opacity: 0.9;">Recommended for the best experience</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.mooves.app" 
+                       target="_blank" class="download-button">
+                        Get it on Google Play
+                    </a>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.8;">
+                        ✓ Automatic updates<br>
+                        ✓ Verified by Google<br>
+                        ✓ Easy installation
+                    </p>
+                </div>
+
+                <div class="download-option">
+                    <h3>📥 Direct APK</h3>
+                    <p style="margin: 1rem 0; opacity: 0.9;">Alternative download method</p>
+                    <a href="mooves-v205.apk" class="download-button">
+                        Download APK (Android)
+                    </a>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.8;">
+                        Version 205<br>
+                        Latest build • 41 MB<br>
+                        <em>Note: Enable "Unknown sources"</em>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legal Section -->
+        <section id="legal" class="legal-section">
+            <h2>📋 Legal Information</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                Please review our legal documents to understand your rights and our commitment to your safety and privacy
+            </p>
+            
+            <div class="legal-grid">
+                <a href="child-safety-standards.html" class="legal-link">
+                    <h3>🛡️ Child Safety</h3>
+                    <p>Comprehensive standards against abuse and exploitation</p>
+                </a>
+                
+                <a href="privacy-policy.html" class="legal-link">
+                    <h3>🔒 Privacy Policy</h3>
+                    <p>How we protect your personal information</p>
+                </a>
+                
+                <a href="terms.html" class="legal-link">
+                    <h3>📜 Terms & Conditions</h3>
+                    <p>Terms of service and user agreement</p>
+                </a>
+                
+                <a href="policy.html" class="legal-link">
+                    <h3>📋 App Policy</h3>
+                    <p>Additional policies and guidelines</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Built with ❤️ for meaningful connections</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <a href="mailto:mooves@klasholmgren.se" style="color: var(--primary-purple); text-decoration: none;">
+                    mooves@klasholmgren.se
+                </a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

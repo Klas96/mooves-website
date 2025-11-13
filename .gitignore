@@ -1,0 +1,15 @@
+# Ignore old APK versions (only keep the latest)
+mooves-v[0-9][0-9][0-9].apk
+!mooves-v205.apk
+
+# Ignore old AAB versions (only keep the latest)
+mooves-v[0-9][0-9][0-9].aab
+!mooves-v205.aab
+
+# Ignore server deployment scripts (not needed for GitHub Pages)
+deploy-to-server.sh
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
