@@ -394,10 +394,41 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'http://backend.klasholmgren.se/api';
+        const API_BASE_URL = 'https://backend.klasholmgren.se/api';
         
         let authToken = localStorage.getItem('authToken');
         let currentUser = null;
+
+        // Test API connectivity on page load
+        async function testConnection() {
+            try {
+                console.log('Testing connection to:', `${API_BASE_URL}/health`);
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ API connection successful:', data);
+                } else {
+                    console.warn('⚠️ API responded but with error:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('❌ API connection test failed:', error);
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+            }
+        }
+
+        // Test connection on load
+        testConnection();
 
         // Check if already logged in
         if (authToken) {
@@ -413,16 +444,33 @@
             const password = document.getElementById('loginPassword').value;
 
             try {
+                console.log('Attempting login to:', `${API_BASE_URL}/auth/login`);
                 const response = await fetch(`${API_BASE_URL}/auth/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ email, password })
                 });
 
+                // Check if response is ok before parsing JSON
+                if (!response.ok) {
+                    let errorData;
+                    try {
+                        errorData = await response.json();
+                    } catch (e) {
+                        errorData = { error: `Server error: ${response.status} ${response.statusText}` };
+                    }
+                    throw new Error(errorData.error || errorData.message || 'Login failed');
+                }
+
                 const result = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(result.error || result.message || 'Login failed');
+                if (!result.token) {
+                    throw new Error('No authentication token received');
                 }
 
                 authToken = result.token;
@@ -436,7 +484,20 @@
                 }, 1000);
 
             } catch (error) {
-                showAlert('authAlert', error.message, 'error');
+                let errorMessage = error.message;
+                
+                // Check for network/connection errors
+                if (error.message.includes('Failed to fetch') || 
+                    error.message.includes('NetworkError') ||
+                    error.message.includes('Network request failed') ||
+                    error.name === 'TypeError' ||
+                    error.message.includes('fetch')) {
+                    errorMessage = 'Network error: Cannot connect to server. Please check your internet connection and ensure the backend server is running.';
+                    console.error('Network error details:', error);
+                }
+                
+                showAlert('authAlert', errorMessage, 'error');
+                console.error('Login error:', error);
             }
         }
 
