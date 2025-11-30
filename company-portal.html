@@ -192,6 +192,74 @@
             margin-bottom: 2rem;
         }
 
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(90, 59, 255, 0.1);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            position: relative;
+            top: 2px;
+        }
+
+        .tab:hover {
+            color: var(--primary-purple);
+        }
+
+        .tab.active {
+            color: var(--primary-purple);
+            border-bottom-color: var(--primary-purple);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(90, 59, 255, 0.05);
+            border-left: 4px solid var(--primary-purple);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-purple);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-purple);
+            border-radius: 2px;
+        }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -320,76 +388,167 @@
 
             <div id="storeInfo" class="store-info">
                 <h2>Store Information</h2>
-                <p id="storeName">Loading...</p>
-                <p id="storeDescription"></p>
-                <p id="storeLocation"></p>
-                <span id="storeStatus" class="store-status">Loading...</span>
+                <div id="storeDetails" style="display: block;">
+                    <p id="storeName">Loading...</p>
+                    <p id="storeDescription"></p>
+                    <p id="storeLocation"></p>
+                    <span id="storeStatus" class="store-status">Loading...</span>
+                </div>
+                <div id="createStoreForm" style="display: none;">
+                    <h3>Create Store Account</h3>
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">You need to create a store account before you can create challenges.</p>
+                    <form id="createStoreFormElement" onsubmit="handleCreateStore(event)">
+                        <div class="form-group">
+                            <label>Store Name *</label>
+                            <input type="text" id="storeNameInput" placeholder="e.g., My Company" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="storeDescriptionInput" placeholder="Describe your business"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="storeLocationInput" placeholder="e.g., Stockholm, Sweden">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Store Account</button>
+                    </form>
+                </div>
             </div>
 
+            <!-- Coupon & Challenge Creation Section -->
             <div class="coupon-form">
-                <h2>Create New Coupon / Challenge</h2>
-                <form id="couponForm" onsubmit="handleCreateGoal(event)">
-                    <div class="form-group">
-                        <label>Challenge Title *</label>
-                        <input type="text" id="goalTitle" placeholder="e.g., Run 100km Challenge" required>
+                <h2 style="margin-bottom: 1.5rem;">Create Coupons & Challenges</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('coupon')">
+                        🎫 Quick Coupon
+                    </button>
+                    <button class="tab" onclick="switchTab('challenge')">
+                        🏃 Challenge with Coupon
+                    </button>
+                </div>
+
+                <!-- Quick Coupon Tab -->
+                <div id="couponTab" class="tab-content active">
+                    <div class="info-box">
+                        <p><strong>💡 Quick Coupon:</strong> Create a coupon that users can redeem immediately. No challenge required - perfect for promotions, special offers, or direct rewards.</p>
                     </div>
-                    <div class="form-group">
-                        <label>Challenge Description</label>
-                        <textarea id="goalDescription" placeholder="Describe the challenge and what users need to do"></textarea>
-                    </div>
-                    <div class="form-row">
+                    <form id="directCouponForm" onsubmit="handleCreateCoupon(event)">
                         <div class="form-group">
-                            <label>Target Distance (meters)</label>
-                            <input type="number" id="targetDistance" placeholder="e.g., 100000 for 100km" min="1">
+                            <label>Coupon Code *</label>
+                            <input type="text" id="directCouponCode" placeholder="e.g., SUMMER2025" required>
+                            <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">This is the code users will enter to redeem the coupon</small>
                         </div>
                         <div class="form-group">
-                            <label>Target Duration (minutes)</label>
-                            <input type="number" id="targetDuration" placeholder="e.g., 3600 for 60 hours" min="1">
+                            <label>Coupon Description</label>
+                            <textarea id="directCouponDescription" placeholder="Describe what the coupon offers (e.g., '20% off on all items')"></textarea>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Start Date *</label>
-                            <input type="date" id="startDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <input type="date" id="endDate">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Max Participants (leave empty for unlimited)</label>
-                        <input type="number" id="maxParticipants" min="1">
-                    </div>
-                    <hr style="margin: 2rem 0; border: none; border-top: 2px solid rgba(90, 59, 255, 0.1);">
-                    <h3 style="margin-bottom: 1rem;">Coupon Details</h3>
-                    <div class="form-group">
-                        <label>Coupon Code *</label>
-                        <input type="text" id="couponCode" placeholder="e.g., RUN100KM2025" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Coupon Description</label>
-                        <textarea id="couponDescription" placeholder="Describe what the coupon offers"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Discount Percentage (%)</label>
-                            <input type="number" id="couponDiscount" placeholder="e.g., 20 for 20% off" min="0" max="100" step="0.01">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Discount Percentage (%)</label>
+                                <input type="number" id="directCouponDiscount" placeholder="e.g., 20" min="0" max="100" step="0.01">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Use percentage OR fixed amount (not both)</small>
+                            </div>
+                            <div class="form-group">
+                                <label>OR Fixed Discount Amount</label>
+                                <input type="number" id="directCouponDiscountAmount" placeholder="e.g., 50" min="0" step="0.01">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Amount in your currency (e.g., 50 kr)</small>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label>Fixed Discount Amount</label>
-                            <input type="number" id="couponDiscountAmount" placeholder="e.g., 50 for 50 kr off" min="0" step="0.01">
+                            <label>Expiration Date (optional)</label>
+                            <input type="date" id="directCouponExpiresAt">
+                            <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Leave empty if the coupon doesn't expire</small>
                         </div>
+                        <div class="form-group">
+                            <label>Assign to Specific User (optional)</label>
+                            <input type="email" id="directCouponUserEmail" placeholder="user@example.com">
+                            <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Leave empty to create a general coupon that can be assigned later</small>
+                        </div>
+                        <button type="submit" class="btn">✨ Create Coupon</button>
+                    </form>
+                    <div id="directCouponAlert"></div>
+                </div>
+
+                <!-- Challenge with Coupon Tab -->
+                <div id="challengeTab" class="tab-content">
+                    <div class="info-box">
+                        <p><strong>🏃 Challenge with Coupon:</strong> Create a fitness challenge that rewards users with a coupon when they complete it. Users must reach the target distance or duration to earn the coupon.</p>
                     </div>
-                    <button type="submit" class="btn">Create Challenge with Coupon</button>
-                </form>
-                <div id="formAlert"></div>
+                    <form id="couponForm" onsubmit="handleCreateGoal(event)">
+                        <div class="section-title">
+                            <h3>Challenge Details</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>Challenge Title *</label>
+                            <input type="text" id="goalTitle" placeholder="e.g., Run 100km Challenge" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Challenge Description</label>
+                            <textarea id="goalDescription" placeholder="Describe the challenge and what users need to do"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Target Distance (meters)</label>
+                                <input type="number" id="targetDistance" placeholder="e.g., 100000 for 100km" min="1">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Users must run/walk this distance</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Target Duration (minutes)</label>
+                                <input type="number" id="targetDuration" placeholder="e.g., 3600 for 60 hours" min="1">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Users must exercise for this duration</small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Date *</label>
+                                <input type="date" id="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" id="endDate">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Leave empty for no end date</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Participants (optional)</label>
+                            <input type="number" id="maxParticipants" min="1" placeholder="Leave empty for unlimited">
+                        </div>
+                        
+                        <div class="section-title" style="margin-top: 2rem;">
+                            <h3>Reward Coupon</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>Coupon Code *</label>
+                            <input type="text" id="couponCode" placeholder="e.g., RUN100KM2025" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Coupon Description</label>
+                            <textarea id="couponDescription" placeholder="Describe what the coupon offers"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Discount Percentage (%)</label>
+                                <input type="number" id="couponDiscount" placeholder="e.g., 20" min="0" max="100" step="0.01">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Use percentage OR fixed amount (not both)</small>
+                            </div>
+                            <div class="form-group">
+                                <label>OR Fixed Discount Amount</label>
+                                <input type="number" id="couponDiscountAmount" placeholder="e.g., 50" min="0" step="0.01">
+                                <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Amount in your currency (e.g., 50 kr)</small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">🏃 Create Challenge with Coupon</button>
+                    </form>
+                    <div id="formAlert"></div>
+                </div>
             </div>
 
             <div class="goal-list">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2>Your Challenges</h2>
-                    <button class="btn" onclick="loadGoals()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.9rem;">Refresh</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <h2>📋 Your Challenges & Coupons</h2>
+                    <button class="btn" onclick="loadGoals()" style="width: auto; padding: 0.5rem 1.5rem; font-size: 0.9rem;">🔄 Refresh</button>
                 </div>
                 <div id="goalsList" class="loading">Loading challenges...</div>
             </div>
@@ -535,26 +694,110 @@
 
         async function loadStoreInfo() {
             try {
+                console.log('Loading store info...');
+                console.log('Auth token present:', !!authToken);
+                console.log('Auth token length:', authToken ? authToken.length : 0);
+                console.log('API URL:', `${API_BASE_URL}/stores/my-store`);
+                
                 const response = await fetch(`${API_BASE_URL}/stores/my-store`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
                     headers: {
-                        'Authorization': `Bearer ${authToken}`
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 });
 
+                console.log('Store info response status:', response.status);
+                console.log('Store info response headers:', Object.fromEntries(response.headers.entries()));
+                
                 if (response.ok) {
-                    const store = await response.json();
-                    document.getElementById('storeName').textContent = store.storeName || 'No store registered';
-                    document.getElementById('storeDescription').textContent = store.description || '';
-                    document.getElementById('storeLocation').textContent = store.location || '';
-                    document.getElementById('storeStatus').textContent = store.isActive ? 'Active' : 'Inactive';
-                    document.getElementById('storeStatus').className = `store-status ${store.isActive ? 'active' : 'inactive'}`;
+                    const result = await response.json();
+                    console.log('Store info response:', result);
+                    
+                    // Handle both { success: true, store: {...} } and direct store object
+                    const store = result.store || result;
+                    console.log('Parsed store:', store);
+                    
+                    if (store && (store.storeName || store.id)) {
+                        console.log('Displaying store:', store.storeName, 'Active:', store.isActive);
+                        document.getElementById('storeDetails').style.display = 'block';
+                        document.getElementById('createStoreForm').style.display = 'none';
+                        document.getElementById('storeName').textContent = store.storeName || 'Unnamed Store';
+                        document.getElementById('storeDescription').textContent = store.description || 'No description';
+                        document.getElementById('storeLocation').textContent = store.location || 'No location specified';
+                        const isActive = store.isActive !== undefined ? store.isActive : true;
+                        document.getElementById('storeStatus').textContent = isActive ? 'Active' : 'Inactive';
+                        document.getElementById('storeStatus').className = `store-status ${isActive ? 'active' : 'inactive'}`;
+                        console.log('✅ Store info displayed successfully');
+                        console.log('Store name element:', document.getElementById('storeName').textContent);
+                        console.log('Store status element:', document.getElementById('storeStatus').textContent);
+                    } else {
+                        console.warn('❌ Store object missing required fields:', store);
+                        console.warn('Store object keys:', store ? Object.keys(store) : 'null');
+                        document.getElementById('storeDetails').style.display = 'none';
+                        document.getElementById('createStoreForm').style.display = 'block';
+                    }
                 } else if (response.status === 404) {
                     // No store account yet, but user is logged in
-                    document.getElementById('storeName').textContent = 'No store account registered';
-                    document.getElementById('storeDescription').textContent = 'Please create a store account to continue.';
+                    console.log('No store found (404)');
+                    document.getElementById('storeDetails').style.display = 'none';
+                    document.getElementById('createStoreForm').style.display = 'block';
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('Failed to load store info:', response.status, errorData);
+                    document.getElementById('storeDetails').style.display = 'none';
+                    document.getElementById('createStoreForm').style.display = 'block';
                 }
             } catch (error) {
                 console.error('Failed to load store info:', error);
+                document.getElementById('storeDetails').style.display = 'none';
+                document.getElementById('createStoreForm').style.display = 'block';
+            }
+        }
+
+        async function handleCreateStore(event) {
+            event.preventDefault();
+            const alertDiv = document.getElementById('formAlert');
+
+            const storeData = {
+                storeName: document.getElementById('storeNameInput').value,
+                description: document.getElementById('storeDescriptionInput').value || null,
+                location: document.getElementById('storeLocationInput').value || null
+            };
+
+            try {
+                console.log('Creating store with data:', storeData);
+                const response = await fetch(`${API_BASE_URL}/stores`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(storeData)
+                });
+
+                console.log('Create store response status:', response.status, response.statusText);
+                const result = await response.json();
+                console.log('Create store response:', result);
+
+                if (!response.ok) {
+                    throw new Error(result.error || result.message || 'Failed to create store account');
+                }
+
+                showAlert('formAlert', 'Store account created successfully!', 'success');
+                document.getElementById('createStoreFormElement').reset();
+                
+                // Reload store info
+                await loadStoreInfo();
+            } catch (error) {
+                console.error('Create store error:', error);
+                showAlert('formAlert', error.message || 'Failed to create store account. Please try again.', 'error');
             }
         }
 
@@ -613,6 +856,55 @@
             }
         }
 
+        async function handleCreateCoupon(event) {
+            event.preventDefault();
+            const alertDiv = document.getElementById('directCouponAlert');
+
+            const couponData = {
+                code: document.getElementById('directCouponCode').value,
+                description: document.getElementById('directCouponDescription').value || null,
+                discount: document.getElementById('directCouponDiscount').value ? parseFloat(document.getElementById('directCouponDiscount').value) : null,
+                discountAmount: document.getElementById('directCouponDiscountAmount').value ? parseFloat(document.getElementById('directCouponDiscountAmount').value) : null,
+                expiresAt: document.getElementById('directCouponExpiresAt').value || null,
+                userEmail: document.getElementById('directCouponUserEmail').value || null
+            };
+
+            try {
+                console.log('Creating coupon with data:', couponData);
+                const response = await fetch(`${API_BASE_URL}/coupons`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(couponData)
+                });
+
+                console.log('Create coupon response status:', response.status, response.statusText);
+                const result = await response.json();
+                console.log('Create coupon response:', result);
+
+                if (!response.ok) {
+                    throw new Error(result.error || result.message || 'Failed to create coupon');
+                }
+
+                showAlert('directCouponAlert', '✅ Coupon created successfully!', 'success');
+                document.getElementById('directCouponForm').reset();
+                
+                // Optionally reload goals to show the new coupon
+                setTimeout(() => {
+                    loadGoals();
+                }, 500);
+
+            } catch (error) {
+                console.error('Error creating coupon:', error);
+                showAlert('directCouponAlert', error.message, 'error');
+            }
+        }
+
         async function loadGoals() {
             const goalsList = document.getElementById('goalsList');
             goalsList.innerHTML = '<div class="loading">Loading challenges...</div>';
@@ -649,7 +941,13 @@
                 const goals = result.goals || [];
 
                 if (goals.length === 0) {
-                    goalsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No challenges created yet. Create your first challenge above!</p>';
+                    goalsList.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                            <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">No challenges created yet</p>
+                            <p>Use the tabs above to create your first coupon or challenge!</p>
+                        </div>
+                    `;
                     return;
                 }
 
@@ -657,20 +955,26 @@
 
                 goalsList.innerHTML = goals.map(goal => `
                     <div class="goal-item">
-                        <h3>${goal.title || 'Untitled Challenge'}</h3>
-                        <p>${goal.description || ''}</p>
-                        <div class="goal-meta">
-                            ${goal.targetDistanceMeters ? `<span>📏 ${goal.targetDistanceMeters}m</span>` : ''}
-                            ${goal.targetDurationMinutes ? `<span>⏱️ ${goal.targetDurationMinutes} min</span>` : ''}
-                            <span>📅 Start: ${new Date(goal.startDate).toLocaleDateString()}</span>
-                            ${goal.endDate ? `<span>📅 End: ${new Date(goal.endDate).toLocaleDateString()}</span>` : ''}
-                            <span class="badge ${goal.isActive ? 'active' : ''}">${goal.isActive ? 'Active' : 'Inactive'}</span>
-                            ${goal.participantCount !== undefined ? `<span>👥 ${goal.participantCount} participant${goal.participantCount !== 1 ? 's' : ''}</span>` : ''}
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <h3>${goal.title || 'Untitled Challenge'}</h3>
+                            <span class="badge ${goal.isActive ? 'active' : ''}">${goal.isActive ? '✅ Active' : '⏸️ Inactive'}</span>
                         </div>
-                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(90, 59, 255, 0.1);">
-                            <strong>Coupon:</strong> ${goal.couponCode || 'N/A'}
-                            ${goal.couponDiscount ? `<br>💰 ${goal.couponDiscount}% off` : ''}
-                            ${goal.couponDiscountAmount ? `<br>💰 ${goal.couponDiscountAmount} kr off` : ''}
+                        ${goal.description ? `<p style="color: var(--text-secondary); margin-bottom: 1rem;">${goal.description}</p>` : ''}
+                        <div class="goal-meta">
+                            ${goal.targetDistanceMeters ? `<span>📏 ${(goal.targetDistanceMeters / 1000).toFixed(1)} km</span>` : ''}
+                            ${goal.targetDurationMinutes ? `<span>⏱️ ${Math.floor(goal.targetDurationMinutes / 60)}h ${goal.targetDurationMinutes % 60}m</span>` : ''}
+                            <span>📅 ${new Date(goal.startDate).toLocaleDateString()}</span>
+                            ${goal.endDate ? `<span>→ ${new Date(goal.endDate).toLocaleDateString()}</span>` : ''}
+                            ${goal.participantCount !== undefined ? `<span>👥 ${goal.participantCount} ${goal.participantCount === 1 ? 'participant' : 'participants'}</span>` : ''}
+                            ${goal.completedCount !== undefined ? `<span>✅ ${goal.completedCount} completed</span>` : ''}
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(90, 59, 255, 0.05); border-radius: 8px;">
+                            <strong style="color: var(--primary-purple);">🎫 Reward Coupon:</strong>
+                            <div style="margin-top: 0.5rem;">
+                                <code style="background: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600;">${goal.couponCode || 'N/A'}</code>
+                                ${goal.couponDiscount ? `<span style="margin-left: 0.5rem;">💰 ${goal.couponDiscount}% off</span>` : ''}
+                                ${goal.couponDiscountAmount ? `<span style="margin-left: 0.5rem;">💰 ${goal.couponDiscountAmount} kr off</span>` : ''}
+                            </div>
                         </div>
                     </div>
                 `).join('');
@@ -695,9 +999,35 @@
             document.getElementById('authSection').style.display = 'block';
         }
 
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            if (tabName === 'coupon') {
+                document.getElementById('couponTab').classList.add('active');
+                document.querySelectorAll('.tab')[0].classList.add('active');
+            } else if (tabName === 'challenge') {
+                document.getElementById('challengeTab').classList.add('active');
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            }
+        }
+
         // Set minimum date to today
-        document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
-        document.getElementById('endDate').min = new Date().toISOString().split('T')[0];
+        if (document.getElementById('startDate')) {
+            document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
+        }
+        if (document.getElementById('endDate')) {
+            document.getElementById('endDate').min = new Date().toISOString().split('T')[0];
+        }
+        if (document.getElementById('directCouponExpiresAt')) {
+            document.getElementById('directCouponExpiresAt').min = new Date().toISOString().split('T')[0];
+        }
     </script>
 </body>
 </html>
