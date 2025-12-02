@@ -497,22 +497,54 @@
                 </div>
             </div>
 
-            <!-- Coupon & Challenge Creation Section -->
-            <div class="coupon-form">
-                <h2 style="margin-bottom: 1.5rem;">Create Coupons & Challenges</h2>
-                
-                <!-- Tabs -->
-                <div class="tabs">
-                    <button class="tab active" onclick="switchTab('coupon')">
-                        🎫 Quick Coupon
-                    </button>
-                    <button class="tab" onclick="switchTab('challenge')">
-                        🏃 Challenge with Coupon
-                    </button>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('home')">
+                    🏠 Home
+                </button>
+                <button class="tab" onclick="switchTab('coupon')">
+                    🎫 Quick Coupon
+                </button>
+                <button class="tab" onclick="switchTab('challenge')">
+                    🏃 Challenge with Coupon
+                </button>
+            </div>
+
+            <!-- Home Tab Content -->
+            <div id="homeTab" class="tab-content active" style="display: block;">
+                <div class="hero" style="text-align: center; padding: 3rem 2rem; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1); margin-bottom: 3rem;">
+                    <h1 style="font-size: 2.5rem; color: var(--primary-purple); margin-bottom: 1rem;">🏃 Welcome to Mooves</h1>
+                    <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 2rem;">Log training sessions and earn QR rewards when goals are completed</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="app.html" class="btn" style="width: auto; text-decoration: none; display: inline-block;">Launch App</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.mooves.app" target="_blank" class="btn" style="width: auto; text-decoration: none; display: inline-block; background: var(--success);">
+                            📱 Get on Play Store
+                        </a>
+                    </div>
                 </div>
 
+                <div class="features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div class="feature-card" style="background: var(--pink-card); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);">
+                        <h3 style="color: var(--primary-purple); margin-bottom: 1rem;">📊 Track Your Progress</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">Log your training sessions and monitor your fitness journey with detailed statistics and insights.</p>
+                    </div>
+                    <div class="feature-card" style="background: var(--pink-card); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);">
+                        <h3 style="color: var(--primary-purple); margin-bottom: 1rem;">🎯 Complete Challenges</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">Take on challenges and earn rewards when you reach your fitness goals.</p>
+                    </div>
+                    <div class="feature-card" style="background: var(--pink-card); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);">
+                        <h3 style="color: var(--primary-purple); margin-bottom: 1rem;">🎁 Earn Rewards</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">Get QR code coupons and special offers from partner companies when you complete challenges.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coupon & Challenge Creation Section -->
+            <div id="couponChallengeSection" class="coupon-form" style="display: none;">
+                <h2 style="margin-bottom: 1.5rem;">Create Coupons & Challenges</h2>
+
                 <!-- Quick Coupon Tab -->
-                <div id="couponTab" class="tab-content active">
+                <div id="couponTab" class="tab-content">
                     <div class="info-box">
                         <p><strong>💡 Quick Coupon:</strong> Create a coupon that users can redeem immediately. No challenge required - perfect for promotions, special offers, or direct rewards.</p>
                     </div>
@@ -1251,18 +1283,28 @@
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
+                content.style.display = 'none';
             });
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
 
             // Show selected tab
-            if (tabName === 'coupon') {
-                document.getElementById('couponTab').classList.add('active');
+            if (tabName === 'home') {
+                document.getElementById('homeTab').classList.add('active');
+                document.getElementById('homeTab').style.display = 'block';
+                document.getElementById('couponChallengeSection').style.display = 'none';
                 document.querySelectorAll('.tab')[0].classList.add('active');
-            } else if (tabName === 'challenge') {
-                document.getElementById('challengeTab').classList.add('active');
+            } else if (tabName === 'coupon') {
+                document.getElementById('couponChallengeSection').style.display = 'block';
+                document.getElementById('couponTab').classList.add('active');
+                document.getElementById('couponTab').style.display = 'block';
                 document.querySelectorAll('.tab')[1].classList.add('active');
+            } else if (tabName === 'challenge') {
+                document.getElementById('couponChallengeSection').style.display = 'block';
+                document.getElementById('challengeTab').classList.add('active');
+                document.getElementById('challengeTab').style.display = 'block';
+                document.querySelectorAll('.tab')[2].classList.add('active');
             }
         }
 
