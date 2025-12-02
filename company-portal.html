@@ -191,6 +191,10 @@
             transition: all 0.3s;
             width: 100%;
         }
+        
+        .btn.edit-btn {
+            width: auto !important;
+        }
 
         .btn:hover {
             background: var(--primary-purple-light);
@@ -496,7 +500,7 @@
                             <div id="storeInfoView">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 1rem;">
                                     <p id="storeName" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: bold; flex: 1;">Loading...</p>
-                                    <button onclick="enableStoreEdit()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; width: auto !important; min-width: auto; max-width: fit-content;">
+                                    <button onclick="enableStoreEdit()" class="btn edit-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0;">
                                         ✏️ Edit
                                     </button>
                                 </div>
@@ -884,6 +888,9 @@
                     // Handle both { success: true, store: {...} } and direct store object
                     const store = result.store || result;
                     console.log('Parsed store:', store);
+                    console.log('📋 All store keys:', Object.keys(store || {}));
+                    console.log('🖼️ Raw profilePicture value:', store?.profilePicture);
+                    console.log('🖼️ ProfilePicture type:', typeof store?.profilePicture);
                     
                     if (store && (store.storeName || store.id)) {
                         console.log('Displaying store:', store.storeName, 'Active:', store.isActive);
@@ -905,10 +912,14 @@
                         // Display profile picture if available
                         const profilePictureImg = document.getElementById('storeProfilePicture');
                         const profilePicturePlaceholder = document.getElementById('storeProfilePicturePlaceholder');
-                        console.log('🖼️ Profile picture value:', store.profilePicture);
-                        if (store.profilePicture) {
+                        console.log('📋 Store object keys:', Object.keys(store));
+                        console.log('📋 Full store object:', JSON.stringify(store, null, 2));
+                        const profilePictureValue = store.profilePicture || store.ProfilePicture || null; // Try both cases
+                        console.log('🖼️ Profile picture value:', profilePictureValue);
+                        console.log('🖼️ Profile picture type:', typeof profilePictureValue);
+                        if (profilePictureValue && profilePictureValue !== 'null' && profilePictureValue !== 'undefined') {
                             // Handle both relative paths and full URLs
-                            let imageUrl = store.profilePicture;
+                            let imageUrl = profilePictureValue;
                             console.log('📸 Original image URL:', imageUrl);
                             
                             if (imageUrl.startsWith('/uploads/')) {
