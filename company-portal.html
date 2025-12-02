@@ -496,13 +496,12 @@
                             <div id="storeInfoView">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 1rem;">
                                     <p id="storeName" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: bold; flex: 1;">Loading...</p>
-                                    <button onclick="enableStoreEdit()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0;">
+                                    <button onclick="enableStoreEdit()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; width: auto !important; min-width: auto; max-width: fit-content;">
                                         ✏️ Edit
                                     </button>
                                 </div>
                                 <p id="storeDescription" style="margin-bottom: 0.5rem; color: var(--text-secondary);"></p>
                                 <p id="storeLocation" style="margin-bottom: 0.5rem; color: var(--text-secondary);"></p>
-                                <span id="storeStatus" class="store-status">Loading...</span>
                             </div>
                             <div id="storeInfoEdit" style="display: none;">
                                 <form id="editStoreForm" onsubmit="handleUpdateStore(event)">
@@ -757,6 +756,8 @@
                     body: JSON.stringify({ email, password })
                 });
 
+                console.log('Login response status:', response.status, response.statusText);
+                
                 // Check if response is ok before parsing JSON
                 if (!response.ok) {
                     let errorData;
@@ -765,7 +766,17 @@
                     } catch (e) {
                         errorData = { error: `Server error: ${response.status} ${response.statusText}` };
                     }
-                    throw new Error(errorData.error || errorData.message || 'Login failed');
+                    
+                    // Handle specific error codes
+                    if (response.status === 429) {
+                        throw new Error('Too many requests. Please wait a moment and try again.');
+                    } else if (response.status === 401) {
+                        throw new Error('Invalid email or password. Please check your credentials.');
+                    } else if (response.status === 500) {
+                        throw new Error('Server error. Please try again later.');
+                    }
+                    
+                    throw new Error(errorData.error || errorData.message || `Login failed: ${response.status} ${response.statusText}`);
                 }
 
                 const result = await response.json();
@@ -786,19 +797,32 @@
 
             } catch (error) {
                 let errorMessage = error.message;
+                console.error('Login error:', error);
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
                 
-                // Check for network/connection errors
+                // Check for specific error types
                 if (error.message.includes('Failed to fetch') || 
                     error.message.includes('NetworkError') ||
                     error.message.includes('Network request failed') ||
                     error.name === 'TypeError' ||
                     error.message.includes('fetch')) {
-                    errorMessage = 'Network error: Cannot connect to server. Please check your internet connection and ensure the backend server is running.';
+                    
+                    // Try to get more specific error information
+                    if (error.message.includes('CORS') || error.message.includes('cross-origin')) {
+                        errorMessage = 'CORS error: The server is blocking cross-origin requests. Please check server configuration.';
+                    } else if (error.message.includes('Mixed Content')) {
+                        errorMessage = 'Mixed Content error: Cannot access HTTP from HTTPS page. The backend needs to support HTTPS.';
+                    } else {
+                        errorMessage = 'Network error: Cannot connect to server. Please check your internet connection and ensure the backend server is running at ' + API_BASE_URL;
+                    }
                     console.error('Network error details:', error);
                 }
                 
                 showAlert('authAlert', errorMessage, 'error');
-                console.error('Login error:', error);
             }
         }
 
@@ -873,10 +897,6 @@
                         document.getElementById('storeName').textContent = store.storeName || 'Unnamed Store';
                         document.getElementById('storeDescription').textContent = store.description || 'No description';
                         document.getElementById('storeLocation').textContent = store.location || 'No location specified';
-                        const isActive = store.isActive !== undefined ? store.isActive : true;
-                        document.getElementById('storeStatus').textContent = isActive ? 'Active' : 'Inactive';
-                        document.getElementById('storeStatus').className = `store-status ${isActive ? 'active' : 'inactive'}`;
-                        
                         // Populate edit form fields
                         document.getElementById('editStoreName').value = store.storeName || '';
                         document.getElementById('editStoreDescription').value = store.description || '';
@@ -939,7 +959,6 @@
                         
                         console.log('✅ Store info displayed successfully');
                         console.log('Store name element:', document.getElementById('storeName').textContent);
-                        console.log('Store status element:', document.getElementById('storeStatus').textContent);
                     } else {
                         console.warn('❌ Store object missing required fields:', store);
                         console.warn('Store object keys:', store ? Object.keys(store) : 'null');
@@ -1434,29 +1453,56 @@
                             const separator = imageUrl.includes('?') ? '&' : '?';
                             const finalImageUrl = imageUrl + separator + 't=' + Date.now();
                             
-                            profilePictureImg.src = finalImageUrl;
-                            profilePictureImg.style.display = 'block';
-                            profilePicturePlaceholder.style.display = 'none';
-                            console.log('✅ Profile picture image updated with src:', finalImageUrl);
-                            
-                            // Error handling with retry
-                            profilePictureImg.onerror = function() {
-                                console.error('❌ Failed to load profile picture from:', finalImageUrl);
-                                console.error('   Trying to load from original URL:', imageUrl);
-                                // Try without cache-busting as fallback
-                                profilePictureImg.src = imageUrl;
-                                profilePictureImg.onerror = function() {
-                                    console.error('❌ Failed to load profile picture after retry');
-                                    profilePictureImg.style.display = 'none';
-                                    profilePicturePlaceholder.style.display = 'flex';
+                            // Set up image load promise
+                            const imageLoadPromise = new Promise((resolve) => {
+                                // Clear any existing handlers
+                                profilePictureImg.onerror = null;
+                                profilePictureImg.onload = null;
+                                
+                                profilePictureImg.onload = function() {
+                                    console.log('✅ Profile picture loaded successfully from:', profilePictureImg.src);
+                                    profilePictureImg.style.display = 'block';
+                                    profilePicturePlaceholder.style.display = 'none';
+                                    resolve(true);
                                 };
-                            };
+                                
+                                profilePictureImg.onerror = function() {
+                                    console.error('❌ Failed to load profile picture from:', finalImageUrl);
+                                    // Try without cache-busting as fallback
+                                    profilePictureImg.onerror = null;
+                                    profilePictureImg.src = imageUrl;
+                                    profilePictureImg.onerror = function() {
+                                        console.error('❌ Failed to load profile picture after retry from:', imageUrl);
+                                        profilePictureImg.style.display = 'none';
+                                        profilePicturePlaceholder.style.display = 'flex';
+                                        resolve(false);
+                                    };
+                                };
+                                
+                                // Set image source (this triggers load)
+                                profilePictureImg.src = finalImageUrl;
+                                profilePictureImg.style.display = 'block';
+                                profilePicturePlaceholder.style.display = 'none';
+                                console.log('✅ Profile picture image updated with src:', finalImageUrl);
+                                
+                                // Timeout after 2 seconds
+                                setTimeout(() => {
+                                    if (profilePictureImg.complete && profilePictureImg.naturalHeight !== 0) {
+                                        resolve(true);
+                                    } else {
+                                        console.warn('⚠️ Image load timeout, proceeding anyway');
+                                        resolve(false);
+                                    }
+                                }, 2000);
+                            });
                             
-                            profilePictureImg.onload = function() {
-                                console.log('✅ Profile picture loaded successfully');
-                            };
+                            // Wait for image to load (or timeout)
+                            await imageLoadPromise;
                         }
                     }
+                    
+                    // Small delay to ensure image is displayed
+                    await new Promise(resolve => setTimeout(resolve, 300));
                     
                     // Reload store info to ensure everything is in sync
                     console.log('🔄 Reloading store info...');
