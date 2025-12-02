@@ -8,26 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Mooves - Log training sessions and earn QR rewards when goals are completed.">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="mooves">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <!-- Web permissions for file access -->
-  <meta name="permissions-policy" content="camera=*, microphone=*, geolocation=*">
-
-  <!-- Content Security Policy - Allow Flutter web app to function -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: ws:; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' https:; manifest-src 'self';">
-
-  <!-- Google Sign-In -->
-  <meta name="google-signin-client_id" content="914596881459-508j97v59d1b0ka5oq9mjq0dsfhffdcu.apps.googleusercontent.com">
-
-  <title>Mooves</title>
-  <link rel="manifest" href="manifest.json">
+  <title>Mooves - Home</title>
   
   <style>
     /* Navigation Header Styles */
@@ -83,22 +64,90 @@
       text-decoration: underline;
     }
     
-    /* Ensure body and html are full height */
+    /* Main content */
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
+      min-height: 100vh;
       overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
     
-    /* Add padding to body to account for fixed nav - Flutter will mount here */
     body {
       padding-top: 60px;
       box-sizing: border-box;
+      background: linear-gradient(135deg, #f5f0ff 0%, #fff5f5 100%);
     }
     
-    /* Hide nav on very small screens */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
+      margin-bottom: 3rem;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      color: #5A3BFF;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #5A3BFF 0%, #7A5CFF 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(90, 59, 255, 0.3);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card h3 {
+      color: #5A3BFF;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+    
     @media (max-width: 600px) {
       .website-nav {
         padding: 0.5rem;
@@ -109,6 +158,12 @@
       }
       body {
         padding-top: 50px;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
       }
     }
   </style>
@@ -123,7 +178,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="index.html">App</a></li>
+        <li><a href="app.html">App</a></li>
         <li><a href="company-portal.html">Company Portal</a></li>
         <li><a href="policy.html">Policy</a></li>
         <li><a href="privacy-policy.html">Privacy</a></li>
@@ -132,7 +187,28 @@
     </div>
   </nav>
 
-  <!-- Flutter App -->
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- Main Content -->
+  <div class="container">
+    <div class="hero">
+      <h1>🏃 Welcome to Mooves</h1>
+      <p>Log training sessions and earn QR rewards when goals are completed</p>
+      <a href="app.html" class="cta-button">Launch App</a>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>📊 Track Your Progress</h3>
+        <p>Log your training sessions and monitor your fitness journey with detailed statistics and insights.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎯 Complete Challenges</h3>
+        <p>Take on challenges and earn rewards when you reach your fitness goals.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎁 Earn Rewards</h3>
+        <p>Get QR code coupons and special offers from partner companies when you complete challenges.</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
