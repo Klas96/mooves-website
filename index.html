@@ -80,12 +80,22 @@
       text-decoration: underline;
     }
     
-    /* Add padding to body to account for fixed nav */
-    body {
-      padding-top: 60px;
+    /* Ensure body and html are full height */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
     }
     
-    /* Hide nav on very small screens or when Flutter app is fullscreen */
+    /* Add padding to body to account for fixed nav - Flutter will mount here */
+    body {
+      padding-top: 60px;
+      box-sizing: border-box;
+    }
+    
+    /* Hide nav on very small screens */
     @media (max-width: 600px) {
       .website-nav {
         padding: 0.5rem;
@@ -93,6 +103,9 @@
       .nav-links {
         gap: 0.75rem;
         font-size: 0.85rem;
+      }
+      body {
+        padding-top: 50px;
       }
     }
   </style>
