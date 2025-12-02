@@ -64,6 +64,12 @@
             gap: 0.5rem;
         }
         
+        .nav-brand img {
+            height: 32px;
+            width: 32px;
+            object-fit: contain;
+        }
+        
         .nav-links {
             display: flex;
             gap: 1.5rem;
@@ -417,7 +423,7 @@
     <nav class="website-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <span>🏃</span>
+                <img src="mooves-icon.png" alt="Mooves">
                 <span>Mooves</span>
             </a>
             <ul class="nav-links">
@@ -488,9 +494,9 @@
                         </div>
                         <div style="flex: 1;">
                             <div id="storeInfoView">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                    <p id="storeName" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: bold;">Loading...</p>
-                                    <button onclick="enableStoreEdit()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; gap: 1rem;">
+                                    <p id="storeName" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: bold; flex: 1;">Loading...</p>
+                                    <button onclick="enableStoreEdit()" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0;">
                                         ✏️ Edit
                                     </button>
                                 </div>
@@ -899,20 +905,31 @@
                                 console.log('✅ Already a full URL:', imageUrl);
                             }
                             
-                            profilePictureImg.src = imageUrl;
+                            // Add cache-busting parameter to force reload
+                            const separator = imageUrl.includes('?') ? '&' : '?';
+                            const finalImageUrl = imageUrl + separator + 't=' + Date.now();
+                            
+                            // Set image source
+                            profilePictureImg.src = finalImageUrl;
                             profilePictureImg.style.display = 'block';
                             profilePicturePlaceholder.style.display = 'none';
-                            console.log('✅ Profile picture image element updated with src:', imageUrl);
+                            console.log('✅ Profile picture image element updated with src:', finalImageUrl);
                             
                             // Add error handler to detect image load failures
                             profilePictureImg.onerror = function() {
-                                console.error('❌ Failed to load profile picture:', imageUrl);
-                                profilePictureImg.style.display = 'none';
-                                profilePicturePlaceholder.style.display = 'flex';
+                                console.error('❌ Failed to load profile picture from:', finalImageUrl);
+                                console.error('   Trying to load from original URL:', imageUrl);
+                                // Try without cache-busting as fallback
+                                profilePictureImg.src = imageUrl;
+                                profilePictureImg.onerror = function() {
+                                    console.error('❌ Failed to load profile picture after retry');
+                                    profilePictureImg.style.display = 'none';
+                                    profilePicturePlaceholder.style.display = 'flex';
+                                };
                             };
                             
                             profilePictureImg.onload = function() {
-                                console.log('✅ Profile picture loaded successfully:', imageUrl);
+                                console.log('✅ Profile picture loaded successfully from:', finalImageUrl);
                             };
                         } else {
                             console.log('⚠️ No profile picture available');
@@ -1406,27 +1423,37 @@
                             if (imageUrl.startsWith('/uploads/')) {
                                 const baseUrl = API_BASE_URL.replace('/api', '');
                                 imageUrl = `${baseUrl}${imageUrl}`;
+                                console.log('🔗 Constructed full URL:', imageUrl);
                             } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
                                 const baseUrl = API_BASE_URL.replace('/api', '');
                                 imageUrl = `${baseUrl}/${imageUrl}`;
+                                console.log('🔗 Constructed full URL (no leading slash):', imageUrl);
                             }
                             
-                            // Add timestamp to force browser to reload image
-                            const timestamp = new Date().getTime();
-                            profilePictureImg.src = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 't=' + timestamp;
+                            // Add cache-busting parameter to force reload
+                            const separator = imageUrl.includes('?') ? '&' : '?';
+                            const finalImageUrl = imageUrl + separator + 't=' + Date.now();
+                            
+                            profilePictureImg.src = finalImageUrl;
                             profilePictureImg.style.display = 'block';
                             profilePicturePlaceholder.style.display = 'none';
-                            console.log('✅ Profile picture image updated with src:', profilePictureImg.src);
+                            console.log('✅ Profile picture image updated with src:', finalImageUrl);
                             
-                            // Error handling
+                            // Error handling with retry
                             profilePictureImg.onerror = function() {
-                                console.error('❌ Failed to load profile picture from:', profilePictureImg.src);
-                                profilePictureImg.style.display = 'none';
-                                profilePicturePlaceholder.style.display = 'flex';
+                                console.error('❌ Failed to load profile picture from:', finalImageUrl);
+                                console.error('   Trying to load from original URL:', imageUrl);
+                                // Try without cache-busting as fallback
+                                profilePictureImg.src = imageUrl;
+                                profilePictureImg.onerror = function() {
+                                    console.error('❌ Failed to load profile picture after retry');
+                                    profilePictureImg.style.display = 'none';
+                                    profilePicturePlaceholder.style.display = 'flex';
+                                };
                             };
                             
                             profilePictureImg.onload = function() {
-                                console.log('✅ Profile picture loaded successfully from:', profilePictureImg.src);
+                                console.log('✅ Profile picture loaded successfully');
                             };
                         }
                     }
