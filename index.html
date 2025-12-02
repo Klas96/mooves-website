@@ -9,6 +9,7 @@
   <meta name="description" content="Mooves - Log training sessions and earn QR rewards when goals are completed.">
 
   <title>Mooves - Home</title>
+  <link rel="icon" type="image/png" href="mooves-icon.png">
   
   <style>
     /* Navigation Header Styles */
@@ -39,6 +40,12 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+    
+    .nav-brand img {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
     }
     
     .nav-links {
@@ -93,6 +100,13 @@
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
       margin-bottom: 3rem;
+    }
+    
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      display: block;
     }
     
     .hero h1 {
@@ -159,6 +173,10 @@
       body {
         padding-top: 50px;
       }
+      .hero-logo {
+        width: 80px;
+        height: 80px;
+      }
       .hero h1 {
         font-size: 2rem;
       }
@@ -173,7 +191,7 @@
   <nav class="website-nav">
     <div class="nav-container">
       <a href="index.html" class="nav-brand">
-        <span>🏃</span>
+        <img src="mooves-icon.png" alt="Mooves">
         <span>Mooves</span>
       </a>
       <ul class="nav-links">
@@ -190,6 +208,7 @@
   <!-- Main Content -->
   <div class="container">
     <div class="hero">
+      <img src="mooves-icon.png" alt="Mooves Logo" class="hero-logo">
       <h1>🏃 Welcome to Mooves</h1>
       <p>Log training sessions and earn QR rewards when goals are completed</p>
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
