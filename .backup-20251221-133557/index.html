@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/mooves-website/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mooves - Log training sessions and earn QR rewards when goals are completed.">
+
+  <title>Mooves - Home</title>
+  <link rel="icon" type="image/png" href="mooves-icon.png">
+  
+  <style>
+    /* Navigation Header Styles */
+    .website-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      background: linear-gradient(135deg, #5A3BFF 0%, #7A5CFF 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 0.75rem 1rem;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .nav-brand {
+      color: white;
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-brand img {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+      padding: 0.5rem 0;
+    }
+    
+    .nav-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    
+    /* Main content */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    body {
+      padding-top: 60px;
+      box-sizing: border-box;
+      background: linear-gradient(135deg, #f5f0ff 0%, #fff5f5 100%);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
+      margin-bottom: 3rem;
+    }
+    
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      display: block;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      color: #5A3BFF;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #5A3BFF 0%, #7A5CFF 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(90, 59, 255, 0.3);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card h3 {
+      color: #5A3BFF;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 600px) {
+      .website-nav {
+        padding: 0.5rem;
+      }
+      .nav-links {
+        gap: 0.75rem;
+        font-size: 0.85rem;
+      }
+      body {
+        padding-top: 50px;
+      }
+      .hero-logo {
+        width: 80px;
+        height: 80px;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Website Navigation Header -->
+  <nav class="website-nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <img src="mooves-icon.png" alt="Mooves">
+        <span>Mooves</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="app.html">App</a></li>
+        <li><a href="company-portal.html">Company Portal</a></li>
+        <li><a href="policy.html">Policy</a></li>
+        <li><a href="privacy-policy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="hero">
+      <img src="mooves-icon.png" alt="Mooves Logo" class="hero-logo">
+      <h1>🏃 Welcome to Mooves</h1>
+      <p>Log training sessions and earn QR rewards when goals are completed</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="app.html" class="cta-button">Launch App</a>
+        <a href="https://play.google.com/store/apps/details?id=com.mooves.app" target="_blank" class="cta-button" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+          📱 Get on Play Store
+        </a>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>📊 Track Your Progress</h3>
+        <p>Log your training sessions and monitor your fitness journey with detailed statistics and insights.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎯 Complete Challenges</h3>
+        <p>Take on challenges and earn rewards when you reach your fitness goals.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎁 Earn Rewards</h3>
+        <p>Get QR code coupons and special offers from partner companies when you complete challenges.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
