@@ -282,9 +282,40 @@
         </div>
     </div>
 
-    <script src="company-portal.js"></script>
-</body>
-</html>
+
+    <script>
+        const API_BASE_URL = 'https://backend.klasholmgren.se/api';
+        
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+
+        // Test API connectivity on page load
+        async function testConnection() {
+            try {
+                console.log('Testing connection to:', `${API_BASE_URL}/health`);
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                console.log('Connection test response:', response.status, response.statusText);
+            } catch (error) {
+                console.error('Connection test failed:', error);
+            }
+        }
+
+        // Test connection on page load
+        testConnection();
+
+        // Check if user is already authenticated
+        if (authToken) {
+            checkAuth();
+        }
+
+        async function handleLogin(event) {
             event.preventDefault();
             const alertDiv = document.getElementById('authAlert');
 
@@ -1189,4 +1220,3 @@
     </script>
 </body>
 </html>
-
