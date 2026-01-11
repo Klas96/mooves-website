@@ -307,7 +307,6 @@
                 const response = await fetch(`${API_BASE_URL}/health`, {
                     method: 'GET',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Accept': 'application/json'
                     }
@@ -338,7 +337,6 @@
                 const response = await fetch(`${API_BASE_URL}/auth/login`, {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: { 
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -426,7 +424,6 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/me`, {
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json',
@@ -468,7 +465,6 @@
                 const response = await fetch(`${API_BASE_URL}/stores/my-store`, {
                     method: 'GET',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json',
@@ -620,7 +616,6 @@
                 const response = await fetch(`${API_BASE_URL}/stores`, {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authToken}`,
@@ -671,7 +666,6 @@
                 const response = await fetch(`${API_BASE_URL}/store-goals`, {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authToken}`,
@@ -722,7 +716,6 @@
                 const response = await fetch(`${API_BASE_URL}/coupons`, {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authToken}`,
@@ -762,7 +755,6 @@
                 const response = await fetch(`${API_BASE_URL}/store-goals/store/my-goals`, {
                     method: 'GET',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Accept': 'application/json'
@@ -849,7 +841,6 @@
                 const response = await fetch(`${API_BASE_URL}/coupons/store/my-coupons`, {
                     method: 'GET',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Accept': 'application/json'
@@ -920,7 +911,6 @@
                 const response = await fetch(`${API_BASE_URL}/coupons/${couponId}`, {
                     method: 'DELETE',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Accept': 'application/json'
@@ -959,7 +949,6 @@
                 const response = await fetch(`${API_BASE_URL}/store-goals/${goalId}`, {
                     method: 'DELETE',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,
                         'Accept': 'application/json'
@@ -1181,7 +1170,6 @@
                 const response = await fetch(`${API_BASE_URL}/stores/my-store`, {
                     method: 'PUT',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authToken}`,
