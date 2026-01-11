@@ -378,7 +378,13 @@
                 authToken = result.token;
                 localStorage.setItem('authToken', authToken);
                 
-                showAlert('authAlert', 'Login successful!', 'success');
+                // Show message about email verification if needed
+                if (result.requiresVerification && !result.user.emailVerified) {
+                    showAlert('authAlert', 'Login successful! Please verify your email when possible to access all features.', 'success');
+                } else {
+                    showAlert('authAlert', 'Login successful!', 'success');
+                }
+                
                 setTimeout(() => {
                     document.getElementById('authSection').style.display = 'none';
                     document.getElementById('dashboard').classList.add('active');
@@ -419,8 +425,12 @@
         async function checkAuth() {
             try {
                 const response = await fetch(`${API_BASE_URL}/auth/me`, {
+                    mode: 'cors',
+                    credentials: 'include',
                     headers: {
-                        'Authorization': `Bearer ${authToken}`
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 });
 
@@ -430,13 +440,15 @@
                     document.getElementById('dashboard').classList.add('active');
                     loadDashboard();
                 } else {
+                    // If auth check fails, clear token and show login form
+                    console.warn('Auth check failed, clearing token');
                     localStorage.removeItem('authToken');
                     authToken = null;
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
-                localStorage.removeItem('authToken');
-                authToken = null;
+                // Don't clear token on network errors, just log it
+                // User might be offline or server temporarily unavailable
             }
         }
 
