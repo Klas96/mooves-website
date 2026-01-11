@@ -91,6 +91,7 @@
                                 </div>
                                 <p id="storeDescription" style="margin-bottom: 0.5rem; color: var(--text-secondary);"></p>
                                 <p id="storeLocation" style="margin-bottom: 0.5rem; color: var(--text-secondary);"></p>
+                                <p id="storeWebsite" style="margin-bottom: 0.5rem; color: var(--text-secondary); display: none;"></p>
                             </div>
                             <div id="storeInfoEdit" style="display: none;">
                                 <form id="editStoreForm" onsubmit="handleUpdateStore(event)">
@@ -105,6 +106,11 @@
                                     <div class="form-group">
                                         <label>Location</label>
                                         <input type="text" id="editStoreLocation">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Website</label>
+                                        <input type="url" id="editStoreWebsite" placeholder="https://www.example.com">
+                                        <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Your company website URL</small>
                                     </div>
                                     <div style="display: flex; gap: 0.5rem;">
                                         <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
@@ -130,6 +136,11 @@
                         <div class="form-group">
                             <label>Location</label>
                             <input type="text" id="storeLocationInput" placeholder="e.g., Stockholm, Sweden">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" id="storeWebsiteInput" placeholder="https://www.example.com">
+                            <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">Your company website URL (optional)</small>
                         </div>
                         <button type="submit" class="btn btn-primary">Create Store Account</button>
                     </form>
@@ -479,10 +490,22 @@
                         document.getElementById('storeName').textContent = store.storeName || 'Unnamed Store';
                         document.getElementById('storeDescription').textContent = store.description || 'No description';
                         document.getElementById('storeLocation').textContent = store.location || 'No location specified';
+                        // Update website display if element exists
+                        const storeWebsiteEl = document.getElementById('storeWebsite');
+                        if (storeWebsiteEl) {
+                            if (store.website) {
+                                storeWebsiteEl.innerHTML = `<a href="${store.website}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-purple); text-decoration: underline;">${store.website}</a>`;
+                                storeWebsiteEl.style.display = 'block';
+                            } else {
+                                storeWebsiteEl.textContent = 'No website specified';
+                                storeWebsiteEl.style.display = 'block';
+                            }
+                        }
                         // Populate edit form fields
                         document.getElementById('editStoreName').value = store.storeName || '';
                         document.getElementById('editStoreDescription').value = store.description || '';
                         document.getElementById('editStoreLocation').value = store.location || '';
+                        document.getElementById('editStoreWebsite').value = store.website || '';
                         
                         // Display profile picture if available
                         const profilePictureImg = document.getElementById('storeProfilePicture');
@@ -576,7 +599,8 @@
             const storeData = {
                 storeName: document.getElementById('storeNameInput').value,
                 description: document.getElementById('storeDescriptionInput').value || null,
-                location: document.getElementById('storeLocationInput').value || null
+                location: document.getElementById('storeLocationInput').value || null,
+                website: document.getElementById('storeWebsiteInput').value || null
             };
 
             try {
@@ -1137,7 +1161,8 @@
             const storeData = {
                 storeName: document.getElementById('editStoreName').value,
                 description: document.getElementById('editStoreDescription').value || null,
-                location: document.getElementById('editStoreLocation').value || null
+                location: document.getElementById('editStoreLocation').value || null,
+                website: document.getElementById('editStoreWebsite').value || null
             };
 
             try {
