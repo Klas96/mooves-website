@@ -629,6 +629,18 @@
                 console.log('Create store response:', result);
 
                 if (!response.ok) {
+                    // If token is invalid, clear it and prompt for re-login
+                    if (response.status === 401 || result.code === 'TOKEN_INVALID') {
+                        localStorage.removeItem('authToken');
+                        authToken = null;
+                        showAlert('formAlert', 'Your session has expired. Please log in again.', 'error');
+                        // Redirect to login after a short delay
+                        setTimeout(() => {
+                            document.getElementById('dashboard').classList.remove('active');
+                            document.getElementById('authSection').style.display = 'block';
+                        }, 2000);
+                        return;
+                    }
                     throw new Error(result.error || result.message || 'Failed to create store account');
                 }
 
