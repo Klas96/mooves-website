@@ -1,238 +1,302 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base href="/mooves-website/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mooves - Log training sessions and earn QR rewards when goals are completed.">
+  <meta name="description" content="mooves — record yourself dancing and find out how on-beat your moves really are. On-device pose tracking, beat detection, and a frame-by-frame breakdown.">
 
-  <title>Mooves - Home</title>
+  <title>mooves — dance on the beat</title>
   <link rel="icon" type="image/png" href="mooves-icon.png">
-  
+
   <style>
-    /* Navigation Header Styles */
-    .website-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10000;
-      background: linear-gradient(135deg, #5A3BFF 0%, #7A5CFF 100%);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 0.75rem 1rem;
+    :root {
+      --pink: #FF2D87;
+      --purple: #7C3AED;
+      --bg: #0E0B16;
+      --card: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.08);
+      --muted: rgba(255, 255, 255, 0.6);
     }
-    
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .nav-brand {
-      color: white;
-      font-size: 1.25rem;
-      font-weight: bold;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .nav-brand img {
-      height: 32px;
-      width: 32px;
-      object-fit: contain;
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-size: 0.95rem;
-      opacity: 0.9;
-      transition: opacity 0.2s;
-      padding: 0.5rem 0;
-    }
-    
-    .nav-links a:hover {
-      opacity: 1;
-      text-decoration: underline;
-    }
-    
-    /* Main content */
+
+    * { box-sizing: border-box; }
+
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
-      min-height: 100vh;
       overflow-x: hidden;
+      color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(124, 58, 237, 0.25), transparent 60%),
+        radial-gradient(900px 500px at 0% 10%, rgba(255, 45, 135, 0.18), transparent 55%),
+        var(--bg);
+      background-attachment: fixed;
     }
-    
-    body {
-      padding-top: 60px;
-      box-sizing: border-box;
-      background: linear-gradient(135deg, #f5f0ff 0%, #fff5f5 100%);
-    }
-    
-    .container {
-      max-width: 1200px;
+
+    a { color: inherit; }
+
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 3rem 2rem;
+      padding: 0.9rem 1.5rem;
+      backdrop-filter: blur(10px);
+      background: rgba(14, 11, 22, 0.6);
+      border-bottom: 1px solid var(--border);
     }
-    
+    @media (min-width: 1100px) {
+      .nav { left: 50%; transform: translateX(-50%); border-radius: 0 0 16px 16px; }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 1.2rem;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .brand img { width: 30px; height: 30px; border-radius: 8px; }
+
+    .nav-links { display: flex; gap: 1.4rem; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.95rem; }
+    .nav-links a:hover { color: #fff; }
+    .nav-links .pill {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
     .hero {
       text-align: center;
-      padding: 4rem 2rem;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(90, 59, 255, 0.1);
-      margin-bottom: 3rem;
+      padding: 9rem 1.5rem 4rem;
     }
-    
-    .hero-logo {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 2rem;
-      display: block;
+    .hero img.logo {
+      width: 110px; height: 110px;
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(255, 45, 135, 0.35);
+      margin-bottom: 1.5rem;
     }
-    
     .hero h1 {
-      font-size: 3rem;
-      color: #5A3BFF;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin: 0 0 1rem;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 2.2rem;
+      line-height: 1.5;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1rem 1.8rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.35);
+    }
+    .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124, 58, 237, 0.5); }
+    .cta-note { display: block; margin-top: 0.9rem; color: var(--muted); font-size: 0.85rem; }
+
+    section { padding: 3rem 0; }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: -0.02em;
+      margin: 0 0 0.6rem;
+    }
+    .section-sub { text-align: center; color: var(--muted); max-width: 600px; margin: 0 auto 2.5rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem;
+    }
+    .step .num {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
       margin-bottom: 1rem;
     }
-    
-    .hero p {
-      font-size: 1.25rem;
-      color: #666;
-      margin-bottom: 2rem;
-    }
-    
-    .cta-button {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: linear-gradient(135deg, #5A3BFF 0%, #7A5CFF 100%);
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(90, 59, 255, 0.3);
-    }
-    
+    .step h3 { margin: 0 0 0.4rem; font-size: 1.1rem; }
+    .step p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 0.95rem; }
+
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem;
+    }
+    .feature .icon { font-size: 1.8rem; }
+    .feature h3 { margin: 0.8rem 0 0.4rem; font-size: 1.15rem; }
+    .feature p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 0.95rem; }
+
+    .privacy-banner {
+      margin-top: 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255,45,135,0.12), rgba(124,58,237,0.12));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 1.5rem;
+    }
+    .privacy-banner h2 { margin: 0 0 0.6rem; font-size: clamp(1.4rem, 4vw, 2rem); }
+    .privacy-banner p { color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+    footer {
+      border-top: 1px solid var(--border);
       margin-top: 3rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
     }
-    
-    .feature-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    }
-    
-    .feature-card h3 {
-      color: #5A3BFF;
-      margin-bottom: 1rem;
-    }
-    
-    .feature-card p {
-      color: #666;
-      line-height: 1.6;
-    }
-    
+    footer a { color: var(--muted); text-decoration: none; margin: 0 0.7rem; }
+    footer a:hover { color: #fff; }
+
     @media (max-width: 600px) {
-      .website-nav {
-        padding: 0.5rem;
-      }
-      .nav-links {
-        gap: 0.75rem;
-        font-size: 0.85rem;
-      }
-      body {
-        padding-top: 50px;
-      }
-      .hero-logo {
-        width: 80px;
-        height: 80px;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
+      .nav-links a:not(.pill) { display: none; }
+      .hero { padding-top: 7.5rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Website Navigation Header -->
-  <nav class="website-nav">
-    <div class="nav-container">
-      <a href="index.html" class="nav-brand">
-        <img src="mooves-icon.png" alt="Mooves">
-        <span>Mooves</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="app.html">App</a></li>
-        <li><a href="company-portal.html">Company Portal</a></li>
-        <li><a href="policy.html">Policy</a></li>
-        <li><a href="privacy-policy.html">Privacy</a></li>
-        <li><a href="terms.html">Terms</a></li>
-      </ul>
+  <nav class="nav">
+    <a href="index.html" class="brand">
+      <img src="mooves-icon.png" alt="mooves">
+      <span>mooves</span>
+    </a>
+    <div class="nav-links">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a class="pill" href="https://play.google.com/store/apps/details?id=com.mooves.app" target="_blank" rel="noopener">Get the app</a>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="container">
-    <div class="hero">
-      <img src="mooves-icon.png" alt="Mooves Logo" class="hero-logo">
-      <h1>🏃 Welcome to Mooves</h1>
-      <p>Log training sessions and earn QR rewards when goals are completed</p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="app.html" class="cta-button">Launch App</a>
-        <a href="https://play.google.com/store/apps/details?id=com.mooves.app" target="_blank" class="cta-button" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
-          📱 Get on Play Store
-        </a>
-      </div>
-    </div>
+  <header class="hero">
+    <img src="mooves-icon.png" alt="mooves logo" class="logo">
+    <h1>Dance on the beat.<br><span class="grad">See exactly how.</span></h1>
+    <p>Record yourself dancing and mooves tracks your body, listens to the music, and shows you frame-by-frame how on-beat your moves really are.</p>
+    <a class="cta" href="https://play.google.com/store/apps/details?id=com.mooves.app" target="_blank" rel="noopener">
+      📱 Get it on Google Play
+    </a>
+    <span class="cta-note">Free · Android · No account needed</span>
+  </header>
 
-    <div class="features">
-      <div class="feature-card">
-        <h3>📊 Track Your Progress</h3>
-        <p>Log your training sessions and monitor your fitness journey with detailed statistics and insights.</p>
+  <main>
+    <section class="wrap">
+      <h2 class="section-title">From clip to breakdown in seconds</h2>
+      <p class="section-sub">No setup, no sign-up. Point, dance, analyze.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Record or upload</h3>
+          <p>Use a clip from your gallery or film a new one. Any music, any style.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Trim to the good part</h3>
+          <p>Cut away the dead air at the start and end so only the dancing gets analyzed.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>See your breakdown</h3>
+          <p>Watch your moves tracked back, with your timing and movement laid out next to the beat.</p>
+        </div>
       </div>
-      <div class="feature-card">
-        <h3>🎯 Complete Challenges</h3>
-        <p>Take on challenges and earn rewards when you reach your fitness goals.</p>
+    </section>
+
+    <section class="wrap">
+      <h2 class="section-title">What mooves shows you</h2>
+      <p class="section-sub">Real, measurable read-outs — not a vague star rating.</p>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">🕺</div>
+          <h3>Your moves, tracked</h3>
+          <p>Play your video back with a live stick-figure skeleton drawn on your body, frame by frame.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🎯</div>
+          <h3>On the beat</h3>
+          <p>See what share of your moves landed on the beat — and how many of the big, accented hits you caught.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">⏱️</div>
+          <h3>Timing feel</h3>
+          <p>Find out if you rush ahead of the beat or drag behind it, to the millisecond, and how steady you stayed.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">⚡</div>
+          <h3>Dynamics</h3>
+          <p>See whether you kept it smooth and even or swung between stillness and explosive bursts.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">💪</div>
+          <h3>Body usage</h3>
+          <p>A breakdown of how much of the work came from your arms, your torso, and your legs.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">📊</div>
+          <h3>Sound &amp; movement graphs</h3>
+          <p>Your body's energy and the music's beats on one timeline, so you can see exactly where you locked in.</p>
+        </div>
       </div>
-      <div class="feature-card">
-        <h3>🎁 Earn Rewards</h3>
-        <p>Get QR code coupons and special offers from partner companies when you complete challenges.</p>
+
+      <div class="privacy-banner">
+        <h2>🔒 Private by design</h2>
+        <p>Everything runs on your phone. Your videos are analyzed on-device and never uploaded to a server. No account, no cloud, no tracking.</p>
       </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="mailto:klas0holmgren@gmail.com">Contact</a>
     </div>
-  </div>
+    <p style="margin-top:1rem;">© 2026 mooves · made by Klas Holmgren</p>
+  </footer>
 </body>
 </html>
