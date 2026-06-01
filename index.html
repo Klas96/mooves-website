@@ -157,6 +157,18 @@
     .step h3 { margin: 0 0 0.4rem; font-size: 1.1rem; }
     .step p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 0.95rem; }
 
+    .demo { text-align: center; }
+    .demo-frame {
+      max-width: 340px;
+      margin: 0 auto;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #000;
+      box-shadow: 0 24px 70px rgba(124, 58, 237, 0.35);
+    }
+    .demo-frame video { display: block; width: 100%; height: auto; }
+
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -243,6 +255,15 @@
           <h3>See your breakdown</h3>
           <p>Watch your moves tracked back, with your timing and movement laid out next to the beat.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="wrap demo">
+      <h2 class="section-title">See your moves, tracked</h2>
+      <p class="section-sub">A live stick-figure skeleton drawn on your body, frame by frame.</p>
+      <div class="demo-frame">
+        <video src="skeleton-track.mp4" autoplay muted loop playsinline preload="metadata"
+               aria-label="Demo of mooves drawing a stick-figure skeleton on a dancer"></video>
       </div>
     </section>
 
