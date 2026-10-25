@@ -47,6 +47,26 @@ The following files are preserved when copying the Flutter build:
 - `reset-password.html`
 - `child-safety-standards.html`
 - `mooves-icon.png`
+- `favicon.ico` / `favicon.png` / `apple-touch-icon.png`
 - `deploy-to-server.sh`
 - All `.md` files
+
+## Favicon
+
+Tab icons use the official Mooves app logo (dancing cow), sourced from
+`mooves-app` iOS `AppIcon` 1024×1024:
+
+- `favicon.ico` — 16 / 32 / 48
+- `favicon.png` — 64×64
+- `apple-touch-icon.png` — 180×180
+- `mooves-icon.png` — 512×512 (also used in-page)
+
+GitHub Pages deploys from `master` automatically. The custom domain
+`mooves.klasholmgren.se` currently frames GitHub Pages via Loopia URL
+forwarding; the **browser tab favicon for that hostname** is served by
+Loopia’s frameset host (`/favicon.ico`), not GitHub Pages. After this
+repo change, either upload `favicon.ico` into the Loopia forward site,
+switch Loopia to a HTTP redirect / GitHub Pages custom domain (CNAME),
+or deploy these files with `deploy-to-server.sh` and point DNS at that
+server.
 
